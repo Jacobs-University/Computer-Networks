@@ -22,5 +22,5 @@ set_target_properties(Daytime_TCP_Server PROPERTIES FOLDER "Demos")
 
 # Properties->Linker->Input->Additional Dependencies
 if(WIN32)
-target_link_libraries(Daytime_TCP_Client wsock32 ws2_32)
+target_link_libraries(Daytime_TCP_Server wsock32 ws2_32)
 endif(WIN32)
