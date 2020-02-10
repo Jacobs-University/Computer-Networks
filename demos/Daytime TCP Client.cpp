@@ -1,5 +1,5 @@
 #include "types.h"
-#include "stdio.h"
+#include <iostream>
 
 int main()
 {
@@ -30,8 +30,8 @@ int main()
 	servaddr.sin_port = htons(13);
 
 	// Connect to server
-	res = connect(Socket, (SOCKADDR*) &servaddr, sizeof(servaddr));
-	if (res <= 0) {
+	res = connect(Socket, reinterpret_cast<sockaddr*>(&servaddr), sizeof(servaddr));
+	if (res < 0) {
 		printf("Unable to connect to server\n");
 		return 1;
 	}
