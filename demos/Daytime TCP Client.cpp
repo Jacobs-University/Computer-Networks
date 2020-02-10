@@ -1,21 +1,24 @@
-#include <iostream>
-#include <WinSock2.h>
+#include "types.h"
+#include "stdio.h"
 
 int main()
 {
+	int res;
+	
+#ifdef WIN32
 	// Initialize Winsock
 	WSADATA wsaData;
-	int res = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	res = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (res != NO_ERROR) {
 		printf("WSAStartup failed: %d\n", res);
 		return 1;
 	}
+#endif
 
 	// Create a SOCKET for connecting to server
-	SOCKET Socket = socket(AF_INET, SOCK_STREAM, 0);
-	if (Socket == INVALID_SOCKET) {
-		printf("Error at socket(): %ld\n", WSAGetLastError());
-		WSACleanup();
+	int Socket = static_cast<int>(socket(AF_INET, SOCK_STREAM, 0));
+	if (Socket <= 0) {
+		printf("Error at socket()\n");
 		return 1;
 	}
 
@@ -28,10 +31,8 @@ int main()
 
 	// Connect to server
 	res = connect(Socket, (SOCKADDR*) &servaddr, sizeof(servaddr));
-	if (res == SOCKET_ERROR) {
-		closesocket(Socket);
-		printf("Unable to connect to server: %ld\n", WSAGetLastError());
-		WSACleanup();
+	if (res <= 0) {
+		printf("Unable to connect to server\n");
 		return 1;
 	}
 
@@ -47,13 +48,9 @@ int main()
 		else if (res == 0)
 			printf("Connection closed\n");
 		else
-			printf("recv failed: %d\n", WSAGetLastError());
+			printf("Error at recv()\n");
 
 	} while (res > 0);
-
-	// cleanup
-	closesocket(Socket);
-	WSACleanup();
 
 	return 0;
 }
