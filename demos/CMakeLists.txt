@@ -1,3 +1,6 @@
+# Properties -> C/C++ -> General -> Additional Include Directories
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 # ================================================= DayTime TCP Client =================================================
 add_executable(Daytime_TCP_Client "Daytime TCP Client.cpp")
 
