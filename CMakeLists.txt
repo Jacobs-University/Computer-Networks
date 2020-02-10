@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.1)
 
-project (ComouterNetworks)
+project (ComputerNetworks)
 
 # Turn on the ability to create folders to organize projects (.vcproj)
 # It creates "CMakePredefinedTargets" folder by default and adds CMake defined projects like INSTALL.vcproj and ZERO_CHECK.vcproj
