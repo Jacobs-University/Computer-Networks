@@ -5,4 +5,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+
+// in Linux
+#include <string>
+#include <stdio.h>
 #endif

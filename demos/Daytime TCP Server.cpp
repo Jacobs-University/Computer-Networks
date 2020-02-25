@@ -47,11 +47,19 @@ int main()
 	// Serving the clients
 	const int MAXLINE = 256;
 	char buff[MAXLINE + 1];
+	struct sockaddr_in cliaddr;
+	memset(&cliaddr, 0, sizeof(cliaddr));
+	int cliaddr_len = sizeof(cliaddr);
 	for (;;) {
-		int connfd = static_cast<int>(accept(Socket, nullptr, nullptr));
+		int connfd = static_cast<int>(accept(Socket, reinterpret_cast<sockaddr*>(&cliaddr), &cliaddr_len));
+		printf("Connection from %s\n", inet_ntoa(cliaddr.sin_addr));
+
 		time_t ticks = time(nullptr);
 		snprintf(buff, sizeof(buff), "%.24s\r\n", ctime(&ticks));
+
 		send(connfd, buff, strlen(buff), 0);
+
+		// Use close(connfd) in UNIX or MacOS
 		closesocket(connfd);
 	}
 
