@@ -24,3 +24,15 @@ set_target_properties(Daytime_TCP_Server PROPERTIES FOLDER "Demos")
 if(WIN32)
 target_link_libraries(Daytime_TCP_Server wsock32 ws2_32)
 endif(WIN32)
+
+# ================================================= DayTime HTTP Server =================================================
+add_executable(Daytime_HTTP_Server "Daytime HTTP Server.cpp")
+
+set_target_properties(Daytime_HTTP_Server PROPERTIES PROJECT_LABEL "Daytime HTTP Server")						# in Visual Studio
+set_target_properties(Daytime_HTTP_Server PROPERTIES OUTPUT_NAME "http-time-server")
+set_target_properties(Daytime_HTTP_Server PROPERTIES FOLDER "Demos")
+
+# Properties->Linker->Input->Additional Dependencies
+if(WIN32)
+target_link_libraries(Daytime_HTTP_Server wsock32 ws2_32)
+endif(WIN32)
