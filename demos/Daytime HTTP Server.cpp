@@ -4,6 +4,8 @@
 
 int main()
 {
+	const bool plainText = false;
+	
 	int res;
 
 #ifdef WIN32
@@ -28,7 +30,7 @@ int main()
 	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servaddr.sin_port = htons(8080);
+	servaddr.sin_port = htons(80);
 
 	// Bind socket
 	res = bind(Socket, reinterpret_cast<sockaddr*>(&servaddr), sizeof(servaddr));
@@ -53,26 +55,38 @@ int main()
 		printf("Connection from %s\n", inet_ntoa(cliaddr.sin_addr));
 
 		time_t ticks = time(nullptr);
-		std::string buff(ctime(&ticks));
-		buff += "\n";
+		std::string timeString(ctime(&ticks));
+		timeString += "\n";
 		
+		std::string buff;
+		// Jest sending the time
+		//buff = timeString;
+
+		// HTML page with time
+		buff = "<!DOCTYPE html>\n";
+		buff += "<html lang=\"en\">\n";
+		buff += "<head>\n";
+		buff += "  <meta charset=\"utf-8\">\n";
+		buff += "  <title>CN Time Server</title>\n";
+		buff += "</head>\n";
+		buff += "<body>\n";
+		buff += "  <h1 align='center'>The current time in Jacobs University:</h1>\n";
+		buff += "  <h2 align='center'>" + timeString + "</h2>\n";
+		buff += "</body>\n";
+		buff += "</html>\n";
+
 		std::string http = "HTTP/1.1 200 OK\n";
 		http = http + "Content-Length: " + std::to_string(buff.size()) + "\n";
-		http += "Content-Type: text/plain; charset=utf-8\n\n";
+		if (plainText) {
+			http += "Content-Type: text/plain; charset=utf-8\n\n";
+		}
+		else {
+			http += "Content-Type: text/html; charset=utf-8\n\n";
+		}
+			
 		http += buff;
 		send(connfd, http.c_str(), http.size(), 0);
 		
-//		std::string html = "<!DOCTYPE html>\n";
-//		html += "<html lang=\"en\">\n";
-//		html += "<head>\n";
-//		html += "  <meta charset=\"utf-8\">\n";
-//		html += "  <title>A simple webpage</title>\n";
-//		html += "</head>\n";
-//		html += "<body>\n";
-//		html += "  <h1>Simple HTML5 webpage</h1>\n";
-//		html += "  <p>Hello, world!</p>\n";
-//		html += "</body>\n";
-//		html += "</html>\n";
 
 #ifdef WIN32
 		closesocket(connfd);
