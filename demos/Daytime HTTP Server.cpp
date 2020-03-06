@@ -74,8 +74,11 @@ int main()
 //		html += "</body>\n";
 //		html += "</html>\n";
 
-		// Use close(connfd) in UNIX or MacOS
+#ifdef WIN32
+		closesocket(connfd);
+#else
 		close(connfd);
+#endif
 	}
 
 

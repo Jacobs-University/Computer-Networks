@@ -59,8 +59,11 @@ int main()
 		send(connfd, buff.c_str(), buff.size(), 0);
 
 		// Use close(connfd) in UNIX or MacOS
+#ifdef WIN32
+		closesocket(connfd);
+#else
 		close(connfd);
-		//closesocket(connfd);
+#endif
 	}
 
 
